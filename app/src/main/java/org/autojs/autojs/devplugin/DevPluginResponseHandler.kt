@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.autojs.autojs.Pref
 import org.autojs.autojs.autojs.AutoJs
-import org.autojs.autojs.model.script.Scripts.run
+import org.autojs.autojs.model.script.Scripts.runWithWorkDir
 import org.autojs.autoxjs.R
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -41,7 +41,8 @@ class DevPluginResponseHandler(private val cacheDir: File) : Handler {
                 val script = data["script"].asString
                 val name = getName(data) ?: ""
                 val id = data["id"].asString
-                runScript(id, name, script)
+                val workDir = getOr(data, "work_dir")
+                runScript(id, name, script, workDir)
                 true
             }
             .handler("stop") { data: JsonObject ->
@@ -63,7 +64,9 @@ class DevPluginResponseHandler(private val cacheDir: File) : Handler {
                     stopScript(id)
                 } catch (e: Exception) {
                 }
-                runScript(id, name, script)
+
+                val workDir = getOr(data, "work_dir")
+                runScript(id, name, script, workDir)
                 true
             }
             .handler("stopAll") { data: JsonObject? ->
@@ -94,10 +97,11 @@ class DevPluginResponseHandler(private val cacheDir: File) : Handler {
         dir
     }
 
-    private fun runScript(viewId: String, name: String, script: String) {
+    private fun runScript(viewId: String, name: String, script: String, workDir: String) {
         val name1 = if (name.isEmpty()) "[$viewId]"
         else PFiles.getNameWithoutExtension(name)
-        mScriptExecutions[viewId] = run(StringScriptSource("[remote]$name1", script))
+        mScriptExecutions[viewId] =
+            runWithWorkDir(StringScriptSource("[remote]$name1", script), workDir)
     }
 
     private fun launchProject(dir: String) {
@@ -121,6 +125,11 @@ class DevPluginResponseHandler(private val cacheDir: File) : Handler {
         return if (element is JsonNull) {
             null
         } else element.asString
+    }
+
+    private fun getOr(data: JsonObject, k: String, default: String = ""): String {
+        val element = data[k]
+        return if (element is JsonNull) default else element.asString
     }
 
     private fun saveScript(name: String, script: String) {

@@ -330,7 +330,7 @@ tasks.named("clean").configure {
 }
 //离线文档下载安装
 val docsDir = File(projectDir, "src/main/assets/docs")
-tasks.named("preBuild").dependsOn("installationDocumentation")
+//tasks.named("preBuild").dependsOn("installationDocumentation")
 tasks.register("installationDocumentation") {
     val docV1Uri = "https://codeload.github.com/kkevsekk1/kkevsekk1.github.io/zip/refs/heads/main"
     val docV1Dir = File(docsDir, "v1")
