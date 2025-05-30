@@ -134,6 +134,28 @@ object Scripts {
 
     }
 
+    fun runWithWorkDir(
+        source: ScriptSource,
+        workDir: String = ""
+    ): ScriptExecution? {
+        return try {
+            val myWorkDir =
+                if (!workDir.startsWith("/")) {
+                    Pref.getScriptDirPath() + "/" + workDir
+                } else workDir
+
+            AutoJs.getInstance().scriptEngineService.execute(
+                source,
+                ExecutionConfig(workingDirectory = myWorkDir)
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(GlobalAppContext.get(), e.message, Toast.LENGTH_LONG).show()
+            null
+        }
+
+    }
+
     fun runWithBroadcastSender(file: File): ScriptExecution {
         return AutoJs.getInstance().scriptEngineService.execute(
             ScriptFile(file).toSource(), BROADCAST_SENDER_SCRIPT_EXECUTION_LISTENER,

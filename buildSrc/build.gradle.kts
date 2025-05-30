@@ -5,9 +5,15 @@ plugins {
 }
 
 repositories {
+    gradlePluginPortal()
     mavenCentral()
+    google()
 }
 
-dependencies{
+dependencies {
     implementation("com.google.code.gson:gson:2.9.1")
+}
+
+kotlin {
+    jvmToolchain(17)
 }
