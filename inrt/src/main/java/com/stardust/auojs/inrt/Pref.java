@@ -70,7 +70,7 @@ public class Pref {
 
 
     public static String getScriptDirPath() {
-        String dir = "/脚本/";
+        String dir = "/script/";
         return new File(Environment.getExternalStorageDirectory(), dir).getPath();
     }
 

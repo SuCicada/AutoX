@@ -34,7 +34,7 @@
     <string name="key_use_volume_control_record" translatable="false">key_use_volume_control_record</string>
     <string name="key_guard_mode" translatable="false">key_guard_mode</string>
 
-    <string name="default_value_script_dir_path" translatable="false">/脚本/</string>
+    <string name="default_value_script_dir_path" translatable="false">/script/</string>
     <string name="text_android_job" translatable="false">AndroidJob</string>
     <string name="text_alarm_manager" translatable="false">AlarmManager</string>
     <string name="text_work_manager" translatable="false">WorkManager</string>
